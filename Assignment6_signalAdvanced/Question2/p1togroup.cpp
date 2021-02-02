@@ -18,15 +18,15 @@
 #include <poll.h>
 #include <unistd.h>
 #include <signal.h>
-#include <errno.h>
+#include <iostream>
+using namespace std;
 
 void handler(int x){
     //printf("this is parent handler\n");
     write(1,"This is parent handler\n",sizeof "This is parent handler\n"-1);
 }
 
-int main()
-{
+int main(){
     signal(SIGUSR1,handler);
     setpgid(0,0);
     int gid=getpgid(0);
@@ -60,4 +60,22 @@ int main()
         setpgid(c1,c);
         execv("./p2",NULL);
     }
+    
+    // char* arr[3]={"./p2","./p3","./p4"};
+    // for(int i=0; i<3; i++){
+    //     int c=fork();
+    //     if(c==0){
+    //         cout << "\nParent's id is: " << getppid() << "\n";
+    //         cout << "\nChild's id is: " << getpid() << "\n";
+            
+    //         setpgid(getpid(),getpgrp());
+    //         execvp(arr[i],NULL);
+    //         exit(0);
+    //     }else{
+    //         sleep(2);
+    //         killpg(getpgrp(),SIGUSR1); 
+    //     }
+    // }
+    // sleep(5);
+
 }
