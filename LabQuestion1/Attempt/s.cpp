@@ -28,18 +28,27 @@ char* s1fifo = "s1fifo";
 char* s2fifo = "s2fifo";
 char* Afifo = "Afifo";
 char* Bfifo = "Bfifo";
-int* kill_shmptr;
+
 char client_buffer[1025];
 int clientFifoFds[2];
 int child_pids[4];
 struct pollfd poll_fds[2];
 sigset_t set;
 
+struct shared_memory
+{
+	int pid;
+	int kill_count;
+};
+typedef shared_memory *shmptr;
+shmptr shmptr1;
+
+
 void server_handler(int signum){
 	if(signum==SIGUSR1){
 		//group1
 
-		*kill_shmptr= *kill_shmptr+4;
+		shmptr1->kill_count= shmptr1->kill_count+4;
 		killpg(child_pids[2],SIGSTOP);
 		killpg(child_pids[0],SIGCONT);
 		killpg(child_pids[0],SIGUSR1);
@@ -56,7 +65,7 @@ void server_handler(int signum){
 	}else{
 		//group2
 
-		*kill_shmptr= *kill_shmptr+4;
+		shmptr1->kill_count=shmptr1->kill_count+4;
 
 		killpg(child_pids[0],SIGSTOP);
 		killpg(child_pids[2],SIGCONT);
@@ -79,7 +88,7 @@ void s1_handler(int signum){
 	char s1buff[1024];
 	read(fd,s1buff,1024);
 	cout << "Message read in S1 child via server->" << s1buff << "\n";
-	killpg(child_pids[0],SIGSTOP);
+	
 }
 
 void s2_handler(int signum){
@@ -87,6 +96,7 @@ void s2_handler(int signum){
 	char s2buff[1024];
 	read(fd,s2buff,1024);
 	cout << "Message read in S2 child via server->" << s2buff << "\n";
+	killpg(child_pids[0],SIGSTOP);
 	
 }
 
@@ -95,7 +105,7 @@ void A_handler(int signum){
 	char Abuff[1024];
 	read(fd,Abuff,1024);
 	cout << "Message read in A child via server->" << Abuff << "\n";
-	killpg(child_pids[2],SIGSTOP);
+	
 }
 
 void B_handler(int signum){
@@ -103,6 +113,7 @@ void B_handler(int signum){
 	char Bbuff[1024];
 	read(fd,Bbuff,1024);
 	cout << "Message read in B child via server->" << Bbuff << "\n";
+	killpg(child_pids[2],SIGSTOP);
 	
 }
 
@@ -152,22 +163,11 @@ int main(){
 	signal(SIGUSR1,server_handler);
 	signal(SIGUSR2,server_handler);
 
-	//writing pid for d.cpp to read
 	key_t k_shmptr=ftok("spid",65);
-	int shm_spid=shmget(k_shmptr,sizeof(int),IPC_CREAT|0666);
-	int* shmptr=(int*)shmat(shm_spid,NULL,0);
-	*shmptr=getpid();
-	shmdt(shmptr);
-	//---------pid writing over
-
-	//writing number of kills 
-	key_t kill_key_shmptr=ftok("killCount",65);
-	int kill_shm_spid=shmget(kill_key_shmptr,sizeof(int),IPC_CREAT|0666);
-	kill_shmptr=(int*)shmat(kill_shm_spid,NULL,0);
-	*kill_shmptr = 0;
-	cout << "kill count: "<<*kill_shmptr;
-
-	//setup for reading from clients
+	int shm_spid=shmget(k_shmptr,sizeof(shared_memory),IPC_CREAT|0666);
+	shmptr1=(shmptr)shmat(shm_spid,NULL,0);
+	shmptr1->pid=getpid();
+	shmptr1->kill_count=0;
 		
 	int pid=fork();
 	//child s1
