@@ -13,6 +13,7 @@ int main(){
     pipe(A);
     pipe(B);
     int c = fork();
+    //parent process
     if(c>0){
         char buff[128];
         close(A[0]);

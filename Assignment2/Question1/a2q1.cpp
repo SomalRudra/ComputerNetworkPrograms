@@ -18,8 +18,8 @@ void p1(int fd)
 		if(c=='\n')
 		{
 			printf("\n");
-			sem_post(s1);
-			sem_wait(s2);
+			sem_post(s2);
+			sem_wait(s1);
 			printf("p1");
 		}
 		else
@@ -34,15 +34,15 @@ void p2(int fd)
 	printf("p2");
 	sem_t* s1=sem_open(name1,O_EXCL);
 	sem_t* s2=sem_open(name2,O_EXCL);
-	sem_wait(s1);
+	sem_wait(s2);
 	char c;
 	while(read(fd,&c,1)==1)
 	{
 		if(c=='\n')
 		{
 			printf("\n");
-			sem_post(s2);
-			sem_wait(s1);
+			sem_post(s1);
+			sem_wait(s2);
 			printf("p2");
 		}
 		else
@@ -50,7 +50,7 @@ void p2(int fd)
 			printf("%c",c);
 		}
 	}
-	sem_post(s2);
+	sem_post(s1);
 	
 }
 int main()
