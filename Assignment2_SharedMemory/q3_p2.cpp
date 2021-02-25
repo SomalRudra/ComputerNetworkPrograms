@@ -32,7 +32,7 @@ void p2(){
   	sem_wait(s1);
 
   	while(count--){
-  		printf("%s  p2 -> reading from X\n" , str2);
+  		printf("%s  p2 -> reading from X\n" , str1);
 
   		strcpy(str1 , strcat(str2 , offset));
   		printf("%s   writing in Y\n", str2 );

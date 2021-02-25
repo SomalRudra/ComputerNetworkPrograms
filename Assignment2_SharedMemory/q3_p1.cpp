@@ -30,7 +30,7 @@ void p1(){
   	char * offset = "a";
   	int count = 5;
   	while(count --){
-  		printf("%s  p1 -> reading from Y\n" , str1);
+  		printf("%s  p1 -> reading from Y\n" , str2);
 
   		strcpy(str2 , strcat(str1 , offset));
   		printf("%s   writing in X\n", str1 );
