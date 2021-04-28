@@ -1,0 +1,6 @@
+everyone writes to "famous fifo"
+server reads from "famous fifo"
+server writes [c1,c2,c3] to c1_local_fifo,c2_local_fifo,c3_local_fifo
+c1 reads from c1_local_fifo
+c2 reads from c2_local_fifo
+c3 reads from c3_local_fifo
