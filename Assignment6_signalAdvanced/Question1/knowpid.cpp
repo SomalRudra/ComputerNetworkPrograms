@@ -36,12 +36,12 @@ int main(){
 	
 	pid_t c = fork();
 	if(c == 0){
-		char *args[]={"./test1",NULL}; 
-        execvp(args[0],args);
+		//char *args[]={"./test2",NULL}; 
+        execvp("./test2",NULL);
 	}
 	else{
 		sleep(3);
-		cout << "my pid is" << c;
+		cout << "\n I'm sending signal and my pid is" << getpid();
 		kill( c , SIGUSR1);
 	}
 	return 0;

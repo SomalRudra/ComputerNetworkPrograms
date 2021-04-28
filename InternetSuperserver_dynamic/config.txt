@@ -1,0 +1,4 @@
+NAME 	PROTOCOL	TYPE	PORT 	PATH
+helloworld1 tcp external 7000 ./helloworld1
+helloworld2 udp internal 7002 ./helloworld2
+helloworld3 tcp external 7001 ./helloworld3

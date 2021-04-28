@@ -1,0 +1,5 @@
+hello from server
+sharing by unix domain sockets
+line3
+line4
+line5

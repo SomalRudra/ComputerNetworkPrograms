@@ -1,0 +1,14 @@
+capitalize, math and encryption are 3 services provided by the server.
+which service the client wants to avail, can avail.
+
+steps to run the program -> ./supserver , ./client
+the server reads from config file.
+
+the client then gives a port number, the file path associated with that port number is then exec by server.
+in the file path, there is a C program, which takes the input in the following way: 
+
+Client side: After the connection is made, the client takes the input from command line .
+             now client_sfd communicates with server_nsfd, as the server is waiting for it
+
+Server Side: now the server dups the nsfds to STDIN and STDOUT, the program which has been "execv"ed,
+             the input and output from STDIN,STDOUT which is basically nsfds.

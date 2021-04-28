@@ -26,9 +26,10 @@ if(c>0){
     write(pp1[1],buf1,128);
     read(pp2[0],buf2,128);
     printf("InP1: %s \n",buf2);
+    
 }
 else {
-    //sleep(5);
+    sleep(5);
     execv("./pipe42",NULL);
 }
 return 0;

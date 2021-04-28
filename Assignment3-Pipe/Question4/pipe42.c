@@ -10,6 +10,7 @@ int main()
     char* x1,*x2;
     int fd1=dup(STDIN_FILENO);
     int fd2=dup(STDOUT_FILENO);
+
     dup2(10,STDIN_FILENO);
     dup2(11,STDOUT_FILENO);
     printf("In file 2\n");
@@ -18,7 +19,5 @@ int main()
     printf("Writing to p1:");
     fgets(buf1,128,stdin);
     write(fd2,buf1,128);
-    close(fd1);
-    close(fd2);
     return 0;
 }

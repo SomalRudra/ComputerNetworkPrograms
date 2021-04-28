@@ -26,11 +26,12 @@ int main()
     }
     else
     {
-        dup2(a[0],1);
+        sleep(4);
+        dup2(a[0],STDIN_FILENO);
         close(a[1]);
         //close(b[0]);
         cout << "in child";
-        execv("./q4_part2.out",NULL); 
+        execv("./Assignment3-Pipe/Question4/q4_part2.out",NULL); 
     }
     
 }
